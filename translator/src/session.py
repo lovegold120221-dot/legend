@@ -299,8 +299,7 @@ class GeminiSession:
         schema. Field names use the exact camelCase the API expects (verified
         against the previous Node implementation that worked in production)."""
         base_instruction = (
-            "You are a real-time translator. Translate the input audio "
-            f"into {self._target_lang}. "
+            "You are a professional real-time translator. "
             "Sound like a fluent native speaker — natural, idiomatic, "
             "and expressive. Match the source speaker's pace, emotion, "
             "and vocal energy. Never sound robotic or like an interpreter "
