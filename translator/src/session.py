@@ -1117,6 +1117,9 @@ class GeminiSession:
 
     def _append_history(self, kind: str, segment: dict) -> None:
         """Add a structured segment to rolling memory, capping at limits."""
+        # Normalize: output segments may use "translated_text" — store as "text" too
+        if "translated_text" in segment and "text" not in segment:
+            segment["text"] = segment["translated_text"]
         if not segment.get("text", "").strip():
             return
         segment["kind"] = kind  # "source" or "target"
@@ -1187,15 +1190,7 @@ class GeminiSession:
             cleaned = text.strip()
             if not cleaned:
                 return []
-            return [
-                {
-                    "speaker_id": "speaker_1",
-                    "speaker_label": "",
-                    "translated_text": cleaned,
-                    "confidence": 0.0,
-                    "nuance_notes": "",
-                }
-            ]
+            return [GeminiSession._make_fallback_output_segment(cleaned)]
 
         segments: list[dict] = []
         for raw in matches:
@@ -1209,10 +1204,25 @@ class GeminiSession:
                 seg.setdefault("translated_text", "")
                 seg.setdefault("confidence", 0.0)
                 seg.setdefault("nuance_notes", "")
+                # Normalize text key for history storage
+                if "translated_text" in seg and "text" not in seg:
+                    seg["text"] = seg["translated_text"]
                 segments.append(seg)
             except (json.JSONDecodeError, TypeError):
                 logger.debug("failed to parse output segment JSON: %s", raw[:80])
         return segments
+
+    @staticmethod
+    def _make_fallback_output_segment(text: str) -> dict:
+        """Create a basic output segment from plain text when [OUTPUT] markers are absent."""
+        return {
+            "speaker_id": "speaker_1",
+            "speaker_label": "",
+            "text": text,
+            "translated_text": text,
+            "confidence": 0.0,
+            "nuance_notes": "",
+        }
 
     async def _publish_structured_json(self) -> None:
         """Publish accumulated source+target segments as structured JSON at turn end."""
