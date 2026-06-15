@@ -1,0 +1,137 @@
+
+> orbit-meeting@1.0.3 dev /Users/eburon/opo
+> concurrently --kill-others-on-fail -n web,agent -c blue,magenta "pnpm run dev:web" "pnpm run dev:agent"
+
+[web] 
+[web] > orbit-meeting@1.0.3 dev:web /Users/eburon/opo
+[web] > next dev
+[web] 
+[agent] 
+[agent] > orbit-meeting@1.0.3 dev:agent /Users/eburon/opo
+[agent] > cd translator && uv run python src/agent.py dev
+[agent] 
+[web] ▲ Next.js 16.2.6 (Turbopack)
+[web] - Local:         http://localhost:3000
+[web] - Network:       http://192.168.254.141:3000
+[web] - Environments: .env.local, .env
+[web] ✓ Ready in 204ms
+[web] 
+[agent]     03:14:13.692 DEBUG    asyncio            Using selector: KqueueSelector  
+[agent]     03:14:13.693 DEV      livekit.agents     Watching                           
+[agent]                                              /Users/eburon/opo/translator/src   
+[agent]     03:14:14.216 DEBUG    asyncio            Using selector: KqueueSelector  
+[agent]     03:14:14.219 INFO     livekit.agents     starting worker  
+[agent]                                          {"version": "1.5.11", "rtc-version": 
+[agent] "1.1.8"}
+[agent]     03:14:14.223 INFO     livekit.agents     HTTP server listening on :61848  
+[web]  GET /session/test-room 200 in 412ms (next.js: 255ms, application-code: 157ms)
+[agent]     03:14:14.614 INFO     livekit.agents     registered worker  
+[agent]                                          {"agent_name": "gemini-translator", 
+[agent] "id": "AW_nta3zqN83sdf", "url": "wss://beatrice-wuke14yw.livekit.cloud", 
+[agent] "region": "Japan", "protocol": 17}
+[web] [browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[web] 
+[web] - A server/client branch `if (typeof window !== 'undefined')`.
+[web] - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+[web] - Date formatting in a user's locale which doesn't match the server.
+[web] - External changing data without sending a snapshot of it along with the HTML.
+[web] - Invalid HTML tag nesting.
+[web] 
+[web] It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+[web] 
+[web] https://react.dev/link/hydration-mismatch
+[web] 
+[web]   ...
+[web]     <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+[web]       <AppDevOverlayErrorBoundary globalError={[...]}>
+[web]         <ReplaySsrOnlyErrors>
+[web]         <DevRootHTTPAccessFallbackBoundary>
+[web]           <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+[web]             <HTTPAccessFallbackErrorBoundary pathname="/session/t..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+[web]               <RedirectBoundary>
+[web]                 <RedirectErrorBoundary router={{...}}>
+[web]                   <Head>
+[web]                   <__next_root_layout_boundary__>
+[web]                     <SegmentViewNode type="layout" pagePath="layout.tsx">
+[web]                       <SegmentTrieNode>
+[web]                       <link>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <RootLayout>
+[web]                         <html lang="en" suppressHydrationWarning={true}>
+[web]                           <head>
+[web]                           <body>
+[web]                             <StarfieldBackground>
+[web]                               <canvas
+[web]                                 ref={{current:null}}
+[web]                                 style={{position:"fixed",top:0,left:0,width:"100vw",height:"100vh",zIndex:-1,pointerEvents:"none"}}
+[web]                                 aria-hidden="true"
+[web] -                               className="starfield-background"
+[web]                               >
+[web]                             ...
+[web]                   ...
+[web]  
+[web]  GET /session/test-room/room 200 in 229ms (next.js: 199ms, application-code: 30ms)
+[web]  GET /api/token?room=test-room&identity=peer-43f94959&name=Test%20User 200 in 46ms (next.js: 36ms, application-code: 9ms)
+[web] [browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+[web] 
+[web] - A server/client branch `if (typeof window !== 'undefined')`.
+[web] - Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+[web] - Date formatting in a user's locale which doesn't match the server.
+[web] - External changing data without sending a snapshot of it along with the HTML.
+[web] - Invalid HTML tag nesting.
+[web] 
+[web] It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+[web] 
+[web] https://react.dev/link/hydration-mismatch
+[web] 
+[web]   ...
+[web]     <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+[web]       <AppDevOverlayErrorBoundary globalError={[...]}>
+[web]         <ReplaySsrOnlyErrors>
+[web]         <DevRootHTTPAccessFallbackBoundary>
+[web]           <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+[web]             <HTTPAccessFallbackErrorBoundary pathname="/session/t..." notFound={<NotAllowedRootHTTPFallbackError>} ...>
+[web]               <RedirectBoundary>
+[web]                 <RedirectErrorBoundary router={{...}}>
+[web]                   <Head>
+[web]                   <__next_root_layout_boundary__>
+[web]                     <SegmentViewNode type="layout" pagePath="layout.tsx">
+[web]                       <SegmentTrieNode>
+[web]                       <link>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <script>
+[web]                       <RootLayout>
+[web]                         <html lang="en" suppressHydrationWarning={true}>
+[web]                           <head>
+[web]                           <body>
+[web]                             <StarfieldBackground>
+[web]                               <canvas
+[web]                                 ref={{current:null}}
+[web]                                 style={{position:"fixed",top:0,left:0,width:"100vw",height:"100vh",zIndex:-1,pointerEvents:"none"}}
+[web]                                 aria-hidden="true"
+[web] -                               className="starfield-background"
+[web]                               >
+[web]                             ...
+[web]                   ...
+[web]  
+[web]  GET / 200 in 50ms (next.js: 10ms, application-code: 40ms)
+[web]  GET / 200 in 19ms (next.js: 1536µs, application-code: 18ms)
+[web]  GET /session/a9ec719b-84b0-4298-a59d-f675a0d9c978 200 in 11ms (next.js: 3ms, application-code: 9ms)
+[web]  GET /session/a9ec719b-84b0-4298-a59d-f675a0d9c978/room 200 in 14ms (next.js: 3ms, application-code: 12ms)
+[web]  GET /api/token?room=a9ec719b-84b0-4298-a59d-f675a0d9c978&identity=peer-4a185237&name=gold%20love&host=true 200 in 5ms (next.js: 1044µs, application-code: 4ms)
+[web]  GET /api/token?room=a9ec719b-84b0-4298-a59d-f675a0d9c978&identity=peer-4a185237&name=gold%20love&host=true 200 in 3ms (next.js: 753µs, application-code: 2ms)
+[web] [browser] ⨯ unhandledRejection: SignalRequestError: Request to update local metadata timed out
+[web]     at Generator.next (<anonymous>)
