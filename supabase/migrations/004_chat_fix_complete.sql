@@ -9,7 +9,8 @@
 --
 -- Run this in Supabase SQL Editor. Safe to re-run multiple times.
 
--- Step 0: Drop existing RLS policies (clean slate, idempotent)
+-- Step 0: Drop all existing RLS policies (clean slate, idempotent)
+-- We drop every known policy name to ensure no dependencies remain before the type change.
 DROP POLICY IF EXISTS chat_select_meeting ON public.chat_messages;
 DROP POLICY IF EXISTS chat_insert_own ON public.chat_messages;
 DROP POLICY IF EXISTS chat_select_participant ON public.chat_messages;

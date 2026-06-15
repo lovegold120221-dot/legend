@@ -10,10 +10,13 @@
 -- TEXT, drops FK constraints, then recreates the policies with proper CASTs so the
 -- now-TEXT chat_messages.meeting_id can join against UUID columns in related tables.
 
--- Step 1: Drop RLS policies that depend on meeting_id / user_id
+-- Step 1: Drop ALL RLS policies that could possibly depend on meeting_id or user_id
+-- We drop every known policy name to ensure no dependencies remain before the type change.
 DROP POLICY IF EXISTS chat_select_participant ON public.chat_messages;
 DROP POLICY IF EXISTS chat_select_anonymous ON public.chat_messages;
 DROP POLICY IF EXISTS chat_insert_any ON public.chat_messages;
+DROP POLICY IF EXISTS chat_select_meeting ON public.chat_messages;
+DROP POLICY IF EXISTS chat_insert_own ON public.chat_messages;
 
 -- Step 2: Drop FK constraints
 ALTER TABLE public.chat_messages DROP CONSTRAINT IF EXISTS chat_messages_meeting_id_fkey;
