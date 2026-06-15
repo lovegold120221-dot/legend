@@ -126,12 +126,7 @@ export default function Home() {
               <img src="/icon-eburon.svg" alt="Eburon AI" className="entry-brand-logo" />
               <span>Orbit Meeting</span>
             </div>
-            <nav className="entry-nav" aria-label="Meeting sections">
-              <span className="entry-nav-item entry-nav-item--active">Home</span>
-              <span className="entry-nav-item">Meetings</span>
-              <span className="entry-nav-item">Contacts</span>
-              <Link href="/settings" className="entry-nav-item entry-nav-settings">Settings</Link>
-            </nav>
+
           </div>
           <div className="entry-topbar-actions">
             <button
