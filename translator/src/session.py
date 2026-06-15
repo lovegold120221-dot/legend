@@ -449,27 +449,30 @@ class GeminiSession:
         await setup_complete.wait()
         sent = 0
         mime = f"audio/pcm;rate={GEMINI_INPUT_SAMPLE_RATE}"
-        async for pcm in iter_pcm_for_gemini(self._speaker_track):
-            if self._closed.is_set():
-                return
-            b64 = base64.b64encode(pcm).decode("ascii")
-            msg = {
-                "realtimeInput": {
-                    "audio": {
-                        "mimeType": mime,
-                        "data": b64,
+        try:
+            async for pcm in iter_pcm_for_gemini(self._speaker_track):
+                if self._closed.is_set():
+                    return
+                b64 = base64.b64encode(pcm).decode("ascii")
+                msg = {
+                    "realtimeInput": {
+                        "audio": {
+                            "mimeType": mime,
+                            "data": b64,
+                        }
                     }
                 }
-            }
-            await ws.send(json.dumps(msg))
-            sent += 1
-            if sent in (1, 50) or sent % 500 == 0:
-                logger.info(
-                    "eburon <- %s frames=%d (%s mic in)",
-                    self._target_lang,
-                    sent,
-                    self._speaker_identity,
-                )
+                await ws.send(json.dumps(msg))
+                sent += 1
+                if sent in (1, 50) or sent % 500 == 0:
+                    logger.info(
+                        "eburon <- %s frames=%d (%s mic in)",
+                        self._target_lang,
+                        sent,
+                        self._speaker_identity,
+                    )
+        finally:
+            logger.info("TOMBSTONE: _pump_input terminated for %s -> %s", self._speaker_identity, self._target_lang)
 
     async def _pump_output(
         self,
