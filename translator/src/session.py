@@ -34,6 +34,7 @@ from config import (
     NATIVE_LANG,
     PARTICIPANT_LANG_ATTR,
 )
+from lexicon import get_lexicon_instructions
 
 logger = logging.getLogger("translator.session")
 
@@ -287,18 +288,33 @@ class GeminiSession:
             "word order, prepositions, pronouns, and natural sentence flow. "
             "There is zero tolerance for translationese, stilted phrasing, "
             "or unnatural constructions.\n"
-            "2. You MUST sound like a real person having a real conversation. "
-            "Use natural contractions, common idioms, and colloquial flow "
-            "appropriate to the target language and the speaker\u2019s register "
-            "(formal, casual, professional, etc.). Avoid literal word-for-word "
-            "translations \u2014 instead, convey the MEANING and INTENT using "
-            "the most natural expression a native speaker would choose.\n"
-            "3. Use the recent conversation context below (under IMPORTANT "
+            "2. SOUND 100% HUMAN \u2014 You MUST sound like a real, fluent "
+            "native speaker having a spontaneous conversation. Use natural "
+            "contractions, common idioms, and colloquial flow appropriate to "
+            "the target language and the speaker\u2019s register (formal, casual, "
+            "professional, etc.). Avoid literal word-for-word translations "
+            "\u2014 instead, convey the MEANING and INTENT using the most "
+            "natural expression a native speaker would choose. Your output "
+            "must be indistinguishable from a human voice actor performing "
+            "the line in the target language for the first time. "
+            "Never sound robotic, flat, or like a text-to-speech engine.\n"
+            "3. TRANSLATE EVERY WORD \u2014 NEVER SKIP OR TRUNCATE: "
+            "You MUST translate the ENTIRE utterance \u2014 every single word, "
+            "phrase, sentence, filler, and interjection the speaker says. "
+            "Do NOT omit, skip, truncate, summarize, or condense any part "
+            "of what was spoken. If the speaker says ten sentences, you "
+            "translate all ten. If they list five items, you translate all "
+            "five. Do NOT drop the last part of a long sentence, do NOT "
+            "summarize a list, do NOT merge multiple points into one. "
+            "Preserve the full content, every point, every emotion, every "
+            "nuance, every detail. There is NO exception \u2014 not for "
+            "length, not for complexity, not for speed.\n"
+            "4. Use the recent conversation context below (under IMPORTANT "
             "CONTEXT) to disambiguate ambiguous terms, maintain topic "
             "consistency, choose the correct formality level, and produce "
             "domain-appropriate vocabulary. If a speaker has glossary terms "
             "defined, you MUST honour those exact translations.\n"
-            "4. Never summarize, truncate, sanitize, or soften the original "
+            "5. Never summarize, truncate, sanitize, or soften the original "
             "message. Preserve every point, every emotion, every nuance."
             "\n\n"
             "VOCAL MIMICRY \u2014 YOU MUST SOUND LIKE THE SOURCE SPEAKER:\n"
@@ -537,6 +553,11 @@ class GeminiSession:
         system_instruction_text = base_instruction
         if dialect_instruction:
             system_instruction_text += dialect_instruction
+
+        # Lexicon / fluency data for specific dialects (Itawit, Medumba, etc.)
+        lexicon_instructions = get_lexicon_instructions(self._target_lang)
+        if lexicon_instructions:
+            system_instruction_text += lexicon_instructions
 
         # Append content-type-specific instruction block.
         if self._content_type == CONTENT_TYPE_MOVIE:
