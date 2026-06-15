@@ -144,9 +144,11 @@ export default function Home() {
     setTimeout(() => setCopied(false), 2000);
   }
 
-  // Save meeting + request notification permission + schedule reminder
+  // Derived value for existing logic that expects a datetime-local string
+  const scheduleTime = `${scheduleDate}T${scheduleHour}:${scheduleMinute}`;
+
   async function saveAndRemind() {
-    if (!scheduledLink || !scheduleTime) return;
+    if (!scheduledLink || !scheduleDate || !scheduleHour || !scheduleMinute) return;
 
     const meeting: ScheduledMeeting = {
       id: scheduledLink.split("/").pop() || crypto.randomUUID(),
@@ -311,14 +313,40 @@ export default function Home() {
                     maxLength={60}
                   />
                 </label>
-                <label className="entry-field">
-                  <span>Date and time</span>
-                  <input
-                    type="datetime-local"
-                    value={scheduleTime}
-                    onChange={(event) => setScheduleTime(event.target.value)}
-                  />
-                </label>
+                 <label className="entry-field">
+                   <span>Date and time</span>
+                   <div className="schedule-time-picker">
+                     <input
+                       type="date"
+                       value={scheduleDate}
+                       onChange={(event) => setScheduleDate(event.target.value)}
+                     />
+                     <div className="time-selects">
+                       <select
+                         value={scheduleHour}
+                         onChange={(event) => setScheduleHour(event.target.value)}
+                       >
+                         {Array.from({ length: 24 }, (_, i) => (
+                           <option key={i} value={i.toString().padStart(2, "0")}>
+                             {i.toString().padStart(2, "0")}
+                           </option>
+                         ))}
+                       </select>
+                       <span className="time-separator">:</span>
+                       <select
+                         value={scheduleMinute}
+                         onChange={(event) => setScheduleMinute(event.target.value)}
+                       >
+                         {Array.from({ length: 60 }, (_, i) => (
+                           <option key={i} value={i.toString().padStart(2, "0")}>
+                             {i.toString().padStart(2, "0")}
+                           </option>
+                         ))}
+                       </select>
+                     </div>
+                   </div>
+                 </label>
+
                 <div className="schedule-link">
                   <span>{scheduledLink}</span>
                 </div>
@@ -478,15 +506,7 @@ export default function Home() {
   );
 }
 
-function getDefaultScheduleTime() {
-  const date = new Date();
-  date.setMinutes(date.getMinutes() + 30);
-  date.setSeconds(0, 0);
-  const offset = date.getTimezoneOffset();
-  const localDate = new Date(date.getTime() - offset * 60 * 1000);
-  return localDate.toISOString().slice(0, 16);
-}
-
+// No longer needed as we handle defaults in showSchedulePanel
 function formatScheduleTime(value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Time not set";
