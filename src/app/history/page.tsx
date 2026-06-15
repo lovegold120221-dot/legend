@@ -15,6 +15,7 @@ import {
 export default function HistoryPage() {
   const router = useRouter();
   const { profile, loading: profileLoading } = useUser();
+  const theme = profile?.theme || "dark";
   const [entries, setEntries] = useState<TranslationHistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -96,17 +97,18 @@ export default function HistoryPage() {
     });
 
   return (
-    <div className="history-shell">
-      {/* Header */}
-      <header className="history-header">
-        <button
-          className="history-back-btn"
-          onClick={() => router.back()}
-          aria-label="Go back"
-        >
+    <main className="history-shell" data-theme={theme}>
+      {/* Header (Matching Settings Style) */}
+      <header className="settings-topbar">
+        <div className="settings-topbar-left">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/icon-eburon.svg" alt="Orbit AI" className="settings-brand-logo" />
+          <span className="settings-brand">Orbit Meeting</span>
+        </div>
+        <div className="settings-topbar-center">
           <svg
-            width="20"
-            height="20"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -114,14 +116,12 @@ export default function HistoryPage() {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <line x1="19" y1="12" x2="5" y2="12" />
-            <polyline points="12 19 5 12 12 5" />
+            <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>Back</span>
-        </button>
-        <h1 className="history-title">Translation History</h1>
-        <div className="history-header-right">
-          <div className="history-search-wrapper">
+          <h1>Translation History</h1>
+        </div>
+        <div className="settings-topbar-right">
+          <div className="history-search-wrapper" style={{ marginRight: '16px' }}>
             <svg
               className="history-search-icon"
               width="16"
@@ -144,6 +144,16 @@ export default function HistoryPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          <button
+            type="button"
+            className="settings-close-btn"
+            onClick={() => { if (window.history.length > 1) router.back(); else router.push('/'); }}
+            aria-label="Close history"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M5 5l10 10M15 5l-10 10" />
+            </svg>
+          </button>
         </div>
       </header>
 
@@ -176,7 +186,7 @@ export default function HistoryPage() {
               appear here automatically.
             </p>
             <button
-              className="history-join-btn"
+              className="btn btn-dark"
               onClick={() => router.push("/")}
             >
               Go to Meetings
@@ -227,6 +237,6 @@ export default function HistoryPage() {
           ))
         )}
       </main>
-    </div>
+    </main>
   );
 }

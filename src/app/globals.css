@@ -5810,8 +5810,8 @@ html[data-theme="light"] .glass-panel {
 .history-search-input {
   padding: 8px 12px 8px 32px;
   border-radius: 8px;
-  border: 1px solid var(--border-light, rgba(128,128,128,0.2));
-  background: var(--surface-strong, rgba(128,128,128,0.06));
+  border: 1px solid var(--border-light);
+  background: var(--surface-strong);
   color: var(--fg);
   font-size: 13px;
   width: 220px;
@@ -5883,7 +5883,7 @@ html[data-theme="light"] .glass-panel {
 .history-spinner {
   width: 28px;
   height: 28px;
-  border: 2px solid var(--border-light, rgba(128,128,128,0.15));
+  border: 2px solid var(--border-light);
   border-top-color: var(--fg);
   border-radius: 50%;
   animation: history-spin 0.7s linear infinite;
@@ -5905,7 +5905,7 @@ html[data-theme="light"] .glass-panel {
   font-weight: 600;
   margin: 0 0 12px 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid var(--border-light, rgba(128,128,128,0.1));
+  border-bottom: 1px solid var(--border-light);
   color: var(--fg-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -5922,12 +5922,12 @@ html[data-theme="light"] .glass-panel {
 .history-entry {
   padding: 14px 16px;
   border-radius: 8px;
-  background: var(--surface-strong, rgba(128,128,128,0.04));
-  border: 1px solid var(--border-light, rgba(128,128,128,0.08));
+  background: var(--surface-strong);
+  border: 1px solid var(--border-light);
   transition: border-color 0.15s;
 }
 .history-entry:hover {
-  border-color: var(--border-light, rgba(128,128,128,0.2));
+  border-color: var(--border);
 }
 
 .history-entry-meta {
@@ -5982,7 +5982,7 @@ html[data-theme="light"] .glass-panel {
 }
 
 .history-entry-translated strong {
-  color: var(--accent, #3b82f6);
+  color: var(--accent);
   font-weight: 600;
 }
 
