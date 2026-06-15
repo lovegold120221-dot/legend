@@ -3400,12 +3400,14 @@ html[data-theme="dark"] .auth-logo-bg {
 }
 
 .entry-upcoming {
+  justify-self: center;
   width: min(1040px, 100%);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 20px;
-  padding: 18px 22px;
+  padding: 18px 28px;
+  box-sizing: border-box;
 }
 
 .entry-upcoming h2 {
