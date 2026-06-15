@@ -159,7 +159,9 @@ function applyAgentSubscriptions(
       continue;
     }
 
-    const matchesMe = parsed.targetLang === myLang;
+    const matchesMe = parsed.targetLang === myLang || 
+                         parsed.targetLang === myLang.split("-")[0] || 
+                         myLang === parsed.targetLang.split("-")[0];
     if (!matchesMe) {
       setSubscribed(pub, false);
       continue;
