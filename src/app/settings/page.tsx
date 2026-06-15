@@ -37,6 +37,7 @@ export default function SettingsPage() {
   const [name, setName] = useState("");
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [defaultLanguage, setDefaultLanguage] = useState("en");
+  const [contentType, setContentType] = useState<"normal" | "movie">("normal");
   const [voice, setVoice] = useState("male1");
   const [autoJoinAudio, setAutoJoinAudio] = useState(false);
   const [noiseSuppression, setNoiseSuppression] = useState(true);
@@ -56,6 +57,7 @@ export default function SettingsPage() {
         setName(profile.name || "");
         setTheme(profile.theme || "dark");
         setDefaultLanguage(profile.default_language || "en");
+        setContentType(profile.content_type || "normal");
         setVoice(profile.voice || "Orus");
         setAutoJoinAudio(profile.auto_join_audio ?? false);
         setNoiseSuppression(profile.noise_suppression ?? true);
@@ -84,6 +86,7 @@ export default function SettingsPage() {
       name,
       theme,
       default_language: defaultLanguage,
+      content_type: contentType,
       voice,
       auto_join_audio: autoJoinAudio,
       noise_suppression: noiseSuppression,
@@ -305,6 +308,20 @@ export default function SettingsPage() {
                     {VOICES.map(v => (
                       <option key={v.id} value={v.id}>{v.label}</option>
                     ))}
+                  </select>
+                </div>
+
+                <div className="settings-field">
+                  <label className="settings-label">Shared Screen Content Type</label>
+                  <p className="settings-hint">Select the type of content you share to optimize translation</p>
+                  <select
+                    className="settings-select"
+                    value={contentType}
+                    onChange={(e) => { setContentType(e.target.value as "normal" | "movie"); markDirty(); }}
+                    aria-label="Shared Screen Content Type"
+                  >
+                    <option value="normal">Normal Presentation</option>
+                    <option value="movie">Movie/Cinematic</option>
                   </select>
                 </div>
 

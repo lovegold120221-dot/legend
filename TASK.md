@@ -12,6 +12,12 @@
 - Added password visibility toggles + confirm-password validation on auth pages
 - Minor fixes: Next.js Image component, unused import cleanup, README formatting
 - **Chat file/image attachments** — Supabase `chat-files` storage bucket + migration columns, paperclip upload button, progress bar, attachment previews (image thumbnails, video/audio players, file download cards), LiveKit data channel + Supabase persistence with attachment metadata
+- **Single mega-setup SQL** — `supabase/setup.sql` combines all 8 migrations (001–007 + chat attachments) into one idempotent file: tables, triggers, RLS, indexes, storage bucket
+- **Multi-Speaker Diarization (all content)** — Gemini told to identify/precisely track speakers by voice traits, label them, never merge lines, maintain per-speaker vocal identity throughout
+- **Character Role Mimicry (all content)** — Each speaker gets a distinct vocal style matching their persona/role, consistent throughout, reflecting individual emotional states not a flattened average
+- **Cinematic Translation Quality (all content)** — Natural idiomatic dubbing flow, dramatic pacing aligned with emotional arc, cultural adaptation of idioms/jokes/references, native-native feel not interpreter flatness
+- **Movie mode reworked** — No longer duplicates the three sections; now additive: character labeling for subtitles, lip-sync awareness, genre-aware tone (comedy/drama/action/romance)
+- **Verbatim source transcription** — STT instruction rewritten: capture filler words ("um", "uh", "like", "you know"), false starts, self-corrections, repetitions, stutters, interjections, exact word choice (slang, "ain't", "gonna"), no punctuation-imposed grammar, forensic-level faithful record
 
 ### In Progress
 - (none)

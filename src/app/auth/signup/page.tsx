@@ -3,10 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function SignupPage() {
   const { signUp } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -32,12 +34,16 @@ export default function SignupPage() {
     }
 
     setLoading(true);
-    const { error: signUpError } = await signUp(email, password, name || undefined);
+    const { error: signUpError, session } = await signUp(email, password, name || undefined);
 
     if (signUpError) {
       setError(signUpError.message);
       setLoading(false);
+    } else if (session) {
+      // Auto-confirmed — redirect straight to home, no manual sign-in needed
+      router.push("/");
     } else {
+      // Email confirmation required — show "check your email" screen
       setConfirmationSent(true);
     }
   }

@@ -307,7 +307,7 @@ export default function ChatSidebar({
     setPendingAttachment(null);
     setUploadError(null);
 
-    // 4. Persist to Supabase
+    // 4. Persist to Supabase (let DB auto-generate id — our client-side id is not a valid UUID)
     setSaveError(null);
     supabase
       .from("chat_messages")
@@ -315,7 +315,7 @@ export default function ChatSidebar({
         meeting_id: room.name,
         user_id: senderId,
         sender_name: senderName,
-        message: msg.message,
+        message: msg.message || "",
         attachment_url: msg.attachmentUrl || null,
         attachment_name: msg.attachmentName || null,
         attachment_type: msg.attachmentType || null,

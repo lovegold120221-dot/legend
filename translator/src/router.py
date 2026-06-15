@@ -197,8 +197,9 @@ class TranslationRouter:
                     else "mic"
                 )
 
-                # Read glossary from the speaker's participant attributes
+                # Read glossary and content type from the speaker's participant attributes
                 glossary: list[dict[str, str]] = []
+                content_type = "normal"
                 if participant:
                     raw = (participant.attributes or {}).get(GLOSSARY_ATTR, "")
                     if raw:
@@ -209,6 +210,8 @@ class TranslationRouter:
                         except (json.JSONDecodeError, TypeError):
                             logger.debug("invalid glossary attr for %s", speaker_identity)
 
+                    content_type = (participant.attributes or {}).get("orbit_content_type", "normal")
+
                 session = GeminiSession(
                     room=self._room,
                     speaker_identity=speaker_identity,
@@ -217,6 +220,7 @@ class TranslationRouter:
                     target_lang=target_lang,
                     gemini_api_key=self._gemini_api_key,
                     glossary=glossary,
+                    content_type=content_type,
                 )
                 self._sessions[key] = session
                 try:

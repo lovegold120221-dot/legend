@@ -84,7 +84,7 @@ def get_lexicon_instructions(lang_code: str) -> str:
     lexicon = DIALECT_LEXICONS.get(lang_code)
     if not lexicon:
         return ""
-    
+
     # Specific instructions for syntax and markers (MAJOR UPDATE 3: GRAMMAR SKELETON ANCHORING)
     syntax_extra = ""
     if lang_code == "itv":

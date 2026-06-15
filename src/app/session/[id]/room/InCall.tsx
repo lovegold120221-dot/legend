@@ -128,6 +128,7 @@ export default function InCall({
           orbit_hand: handRaised ? "raised" : "",
           orbit_host: isHost ? "true" : "",
           orbit_glossary: glossaryStr,
+          orbit_content_type: profile?.content_type || "normal",
         });
       }
     };
@@ -136,7 +137,7 @@ export default function InCall({
     return () => {
       room.off(RoomEvent.Connected, apply);
     };
-  }, [room, localParticipant, lang, handRaised, isHost, profile?.glossary]);
+  }, [room, localParticipant, lang, handRaised, isHost, profile?.glossary, profile?.content_type]);
 
   useTranslationRouting(lang, localParticipant.identity, true, true, true, translatorMuted, speakerMuted);
 

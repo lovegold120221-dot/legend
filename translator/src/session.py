@@ -73,6 +73,7 @@ class GeminiSession:
         target_lang: str,
         gemini_api_key: str,
         glossary: list[dict[str, str]] | None = None,
+        content_type: str = "normal",
     ) -> None:
         self._room = room
         self._speaker_identity = speaker_identity
@@ -81,6 +82,7 @@ class GeminiSession:
         self._target_lang = target_lang
         self._gemini_api_key = gemini_api_key
         self._glossary = glossary or []
+        self._content_type = content_type
 
         participant = self._room.remote_participants.get(self._speaker_identity)
         source_lang = (participant.attributes or {}).get(PARTICIPANT_LANG_ATTR) if participant else None
@@ -297,31 +299,113 @@ class GeminiSession:
             "delivering the same message fluently and naturally in the target "
             "language. This means BOTH grammatically impeccable language AND "
             "identical vocal delivery."
+            "\n\n"
+            "MULTI-SPEAKER DIARIZATION \u2014 NON-NEGOTIABLE:\n"
+            "1. The audio you receive may contain MULTIPLE distinct speakers. "
+            "You MUST identify and distinguish each speaker by their unique "
+            "voice characteristics \u2014 pitch, tone, cadence, accent, "
+            "speech patterns, and any other vocal traits.\n"
+            "2. Track speaker changes with precision. When one speaker stops "
+            "and another begins, you MUST shift your vocal delivery to match "
+            "the new speaker\u2019s voice \u2014 NOT continue in the previous "
+            "speaker\u2019s voice.\n"
+            "3. Never merge lines from different speakers into a single "
+            "utterance block. Each speaker\u2019s contribution is a separate "
+            "segment with its own vocal identity.\n"
+            "4. Even in a conversation or meeting, treat each participant "
+            "as a distinct \u201ccharacter\u201d with their own consistent "
+            "vocal signature \u2014 the listener must be able to tell who "
+            "is \u201cspeaking\u201d from your audio delivery alone."
+            "\n\n"
+            "CHARACTER ROLE MIMICRY \u2014 DISTINCT VOCAL STYLES:\n"
+            "1. For EACH speaker, adopt a distinct vocal delivery that matches "
+            "their natural persona and role in the conversation. A confident "
+            "speaker should sound confident, a nervous speaker hesitant, a "
+            "formal speaker measured and precise, an excited speaker buoyant.\n"
+            "2. Match the emotional tone per speaker per moment \u2014 "
+            "excitement, sadness, anger, suspense, warmth, sarcasm \u2014 "
+            "each speaker\u2019s delivery must reflect their individual "
+            "emotional state, not a flattened average.\n"
+            "3. If a speaker raises their voice in anger, your delivery for "
+            "that speaker must carry that same edge. If they soften to a "
+            "whisper, you soften with them.\n"
+            "4. Maintain CONSISTENCY: once you establish a vocal style for a "
+            "speaker early in the conversation, carry that same style through "
+            "the entire session. The listener should immediately recognise "
+            "who is speaking from the vocal character alone."
+            "\n\n"
+            "CINEMATIC TRANSLATION QUALITY \u2014 IDIOMATIC, PACED, CULTURALLY "
+            "ADAPTED:\n"
+            "1. Your translation must sound like a native speaker delivering "
+            "the message with natural, idiomatic flow \u2014 as if the original "
+            "had been written in the target language from the start. Avoid "
+            "literal word-for-word rendering; convey the MEANING and INTENT "
+            "through the most natural expression a native speaker would use.\n"
+            "2. Dramatic pacing matters. Anticipate pauses, emphasis, and "
+            "rhythm to align with the scene\u2019s or conversation\u2019s "
+            "emotional arc. Speed up during excitement, slow down for gravity, "
+            "pause for effect when the speaker does.\n"
+            "3. Culturally adapt idioms, jokes, metaphors, and references "
+            "into equivalent expressions that feel native in the target "
+            "language. A pun that only works in the source language must be "
+            "replaced with a conceptually equivalent play on words or omitted "
+            "gracefully \u2014 never explained or footnoted.\n"
+            "4. Preserve the dramatic tension, narrative flow, and emotional "
+            "trajectory of the original. Your output should feel like "
+            "watching/listening to the content natively in the target language "
+            "\u2014 NOT like listening to a flat interpreter reading a script."
             f"\n\n"
             f"You MUST translate the input into the language with code "
             f"'{self._target_lang}'. All output audio and text must be in "
             f"that language."
         )
 
+        stt_instruction = (
+            "\n\nSTT ACCURACY \u2014 VERBATIM SOURCE TRANSCRIPTION (CRITICAL):\n"
+            "You MUST transcribe the source audio EXACTLY as it was spoken. "
+            "This means:\n"
+            "1. Capture EVERY word the speaker says, including filler words, "
+            "hesitations, and discourse markers: \u201cum\u201d, \u201cuh\u201d, "
+            "\u201clike\u201d, \u201cyou know\u201d, \u201cI mean\u201d, "
+            "\u201cwell\u201d, \u201cactually\u201d, \u201cbasically\u201d, "
+            "\u201cso\u201d, \u201cright\u201d, \u201cokay\u201d, etc. These "
+            "carry meaning about the speaker\u2019s confidence, hesitation, "
+            "and conversational flow.\n"
+            "2. Preserve FALSE STARTS and self-corrections exactly as uttered: "
+            "\u201cI went to the\u2026 I mean, I was heading to the store\u201d "
+            "\u2014 do NOT clean it up to \u201cI was heading to the store.\u201d\n"
+            "3. Preserve REPETITIONS: \u201cI\u2026 I think so\u201d, \u201cIt "
+            "was really really good\u201d \u2014 do NOT collapse them.\n"
+            "4. Preserve STUTTERS and partial words when clearly audible: "
+            "\u201cI w-w-went there\u201d, \u201cHe said he\u2026 uh\u2026 "
+            "he wasn\u2019t sure\u201d.\n"
+            "5. Preserve INTERJECTIONS and backchannels: \u201coh\u201d, "
+            "\u201cah\u201d, \u201cwow\u201d, \u201chmm\u201d, \u201cuh-huh\u201d, "
+            "\u201cnah\u201d, \u201cyeah\u201d, \u201cnope\u201d.\n"
+            "6. Preserve the speaker\u2019s EXACT WORD CHOICE even if it is "
+            "grammatically incorrect, slang, non-standard, or fragmented. "
+            "If they say \u201cain\u2019t\u201d, write \u201cain\u2019t\u201d. "
+            "If they say \u201cgonna\u201d, write \u201cgonna\u201d.\n"
+            "7. Do NOT add punctuation that imposes a grammar the speaker "
+            "didn\u2019t use. Do NOT rephrase, smooth, or \u201cclean up\u201d "
+            "the transcription in any way. The transcription must be a "
+            "forensic-level faithful record of what was actually said and "
+            "how it was said.\n"
+            "8. Accurate language detection is essential. The source speaker\u2019s "
+            "language may change at any time."
+        )
         if self._source_lang:
-            base_instruction += (
-                f"\n\nCRITICAL STT ACCURACY & AUTO-DETECTION: The source speaker's language is dynamic and "
-                f"may change at any time (though their primary profile language is '{self._source_lang}'). "
-                f"You MUST first accurately auto-detect the language being spoken and completely and "
-                f"perfectly transcribe the source audio in that detected language. Accurate language detection "
-                f"and transcription are essential; any errors will cause a domino effect on the translation. "
-                f"Pay close attention to phonetics, context, and domain terminology to ensure a perfect "
-                f"transcription before translating to '{self._target_lang}'."
+            stt_instruction += (
+                f" Their primary profile language is "
+                f"'{self._source_lang}', but detect dynamically."
             )
-        else:
-            base_instruction += (
-                f"\n\nCRITICAL STT ACCURACY & AUTO-DETECTION: The source speaker's language is dynamic and "
-                f"may change at any time. You MUST first accurately auto-detect the language being spoken "
-                f"and completely and perfectly transcribe the source audio in that detected language. "
-                f"Accurate language detection and transcription are essential; any errors will cause a "
-                f"domino effect on the translation. Pay close attention to phonetics, context, and domain "
-                f"terminology to ensure a perfect transcription before translating to '{self._target_lang}'."
-            )
+        stt_instruction += (
+            "\n\nThis verbatim transcription is the FOUNDATION for the "
+            "translation that follows. Errors in transcription cause a domino "
+            "effect on translation quality. Pay close attention to phonetics, "
+            "context, and domain terminology."
+        )
+        base_instruction += stt_instruction
 
         # Inject rolling translation memory (recent transcript context).
         if self._transcript_history:
@@ -376,6 +460,37 @@ class GeminiSession:
         system_instruction_text = base_instruction
         if dialect_instruction:
             system_instruction_text += dialect_instruction
+
+        # Movie/cinematic translation mode — reinforces the base instruction
+        # with context that this is fictional/scripted content requiring
+        # professional dubbing studio standards.
+        if self._content_type == "movie":
+            system_instruction_text += (
+                "\n\nCONTEXT: MOVIE / CINEMATIC CONTENT \u2014 The audio you are "
+                "translating comes from a movie, TV show, or scripted cinematic "
+                "content. The base rules above (Multi-Speaker Diarization, "
+                "Character Role Mimicry, Cinematic Translation Quality) already "
+                "apply to ALL content. These additional directives are specific "
+                "to fictional/scripted material:\n\n"
+                "1. MULTI-SPEAKER DIARIZATION \u2014 In your output transcription, "
+                "label each character\u2019s lines clearly (e.g. \u201cCharacter "
+                "A:\u201d, \u201cCharacter B:\u201d) so downstream systems can "
+                "render subtitles correctly.\n"
+                "2. CHARACTER CONSISTENCY \u2014 Fictional characters have defined "
+                "personalities that don\u2019t change mid-scene. If a character "
+                "is a gruff villain, they stay gruff. If another is a timid "
+                "sidekick, they stay timid. Exaggerate role-appropriate vocal "
+                "traits slightly more than in real-life conversation \u2014 this "
+                "is a performance, not a meeting.\n"
+                "3. LIP-SYNC AWARENESS \u2014 When possible, prefer translations "
+                "that roughly match the original\u2019s syllable count and "
+                "phrasing rhythm, making it easier for viewers to follow along "
+                "with the on-screen performance.\n"
+                "4. GENRE-AWARE TONE \u2014 Adapt the dramatic register to the "
+                "genre: comedy gets punchy timing, drama gets weighty pauses, "
+                "action gets breathless urgency, romance gets warmth and "
+                "softness."
+            )
 
         return {
             "setup": {

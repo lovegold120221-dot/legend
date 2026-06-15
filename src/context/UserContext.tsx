@@ -26,6 +26,7 @@ export type UserProfile = {
   camera_off_on_join?: boolean;
   video_background?: string; // "none" | "blur" | "color-#hex" | "custom-{name}"
   // Translation
+  content_type?: "normal" | "movie";
   show_captions?: boolean;
   mute_original_audio?: boolean;
   translate_audio_playback?: boolean;
@@ -54,6 +55,7 @@ const DEFAULT_PROFILE: UserProfile = {
   mirror_video: true,
   camera_off_on_join: false,
   video_background: "none",
+  content_type: "normal",
   show_captions: true,
   mute_original_audio: true,
   translate_audio_playback: true,
